@@ -1,0 +1,57 @@
+﻿@page
+@model IndexModel
+
+<div id="quote-list"></div>
+
+<div class="btn-box">
+    <button id="btn" class="btn btn-primary">Generate Quote</button>
+</div>
+
+@section Scripts {
+    <script>
+        let quotes = @Json.Serialize(Model.Quotes);
+        let displayedQuotes = [];
+
+        let quoteList = document.getElementById('quote-list');
+        let button = document.getElementById('btn');
+
+        button.addEventListener('click', function () {
+            if (displayedQuotes.length === quotes.length) {
+                alert("All Quotes have been Displayed.")
+                button.disabled = true
+                return;
+            }
+
+            let randomIndex;
+            do {
+                randomIndex = Math.floor(Math.random() * quotes.length)
+            } while (displayedQuotes.includes(randomIndex))
+
+            let newQuote = document.createElement('div')
+            newQuote.className = 'quote'
+
+            let [date, author, quote] = quotes[randomIndex].split(/ : | - /)
+
+
+            let quoteText = document.createElement('h1')
+            quoteText.className = 'quote-text'
+            quoteText.innerText = quote
+
+            let quoteAuthor = document.createElement('p')
+            quoteAuthor.className = 'quote-author'
+            quoteAuthor.innerText = author
+
+            let quoteDate = document.createElement('p')
+            quoteDate.className = 'quote-date'
+            quoteDate.innerText = date
+
+            newQuote.appendChild(quoteDate)
+            newQuote.appendChild(quoteText)
+            newQuote.appendChild(quoteAuthor)
+            quoteList.appendChild(newQuote)
+
+            displayedQuotes.push(randomIndex)
+
+        })
+    </script>
+}
